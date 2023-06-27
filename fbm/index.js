@@ -10,7 +10,18 @@ let challenge
 let hash
 let sid
 
-(async () => {
+const minutes = 0.5
+
+console.log("Program started");
+// (async () => {
+    setInterval(async function () {
+        console.log("Starting run");
+        await run()
+        console.log("Run finished");
+    }, minutes * 60 * 1000);
+// })();
+
+async function run() {
     await axios.get('http://192.168.178.1/login_sid.lua')
         .then(res => {
             const login_result = result_to_json(res.data)
@@ -33,7 +44,6 @@ let sid
     await axios.post('http://192.168.178.1/login_sid.lua', 'response=' + challenge + '-' + hash + '&username=' + username).then(res => {
         let result = result_to_json(res.data)
         sid = result.SessionInfo.SID._text
-        console.log(sid)
     })
 
     await axios.post('http://192.168.178.1/data.lua', 'sid=' + sid + 'lang=de&page=homeNet&no_sidrenew=').then(async res => {
@@ -50,7 +60,6 @@ let sid
                     name: e.nameinfo.name,
                     uid: e.UID
                 })
-                console.log(e.ipinfo + ' ' + e.nameinfo.name + ' ' + e.UID)
             }
         })
 
@@ -60,7 +69,9 @@ let sid
         await fsp.writeFile('log.json', JSON.stringify(data, null, 4));
 
     })
-})();
+}
+
+
 
 function result_to_json(result) {
     return JSON.parse(convert.xml2json(result, {compact: true, spaces: 4}));
