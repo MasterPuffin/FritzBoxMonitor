@@ -10,7 +10,7 @@ let challenge
 let hash
 let sid
 
-const minutes = 0.5
+const minutes = 5
 
 console.log("Program started");
 // (async () => {
@@ -47,8 +47,6 @@ async function run() {
     })
 
     await axios.post('http://192.168.178.1/data.lua', 'sid=' + sid + 'lang=de&page=homeNet&no_sidrenew=').then(async res => {
-        console.log(res.data)
-        console.log(res.data.data.devices)
 
         let current_devices = []
 
